@@ -2,7 +2,7 @@ const binaryOperatorPath = '../../operator-overload/lib/operators/binary';
 
 const operatorMap = {
   '+': { exportMethod: 'addition' },
-  '-': { exportMethod: 'subract' },
+  '-': { exportMethod: 'subtract' },
   '*': { exportMethod: 'multiply' },
   '/': { exportMethod: 'divide' },
   '%': { exportMethod: 'mod' },
@@ -10,9 +10,6 @@ const operatorMap = {
 
 module.exports = function({ types: t }) {
     const requireExpression = t.callExpression(t.identifier('require'), [t.stringLiteral(binaryOperatorPath)]);
-    const requireLiteralMap = Object.keys(operatorMap).reduce((prev, key) => {
-      return prev;
-    }, {});
     return {
       visitor: {
         BinaryExpression: function(path) {

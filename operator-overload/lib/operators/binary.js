@@ -1,5 +1,5 @@
 Symbol.addition = Symbol('addition');
-Symbol.subract = Symbol('subract');
+Symbol.subtract = Symbol('subtract');
 Symbol.mod = Symbol('mod');
 Symbol.divide = Symbol('divide');
 Symbol.multiply = Symbol('multiply');
@@ -22,7 +22,7 @@ const createBinaryExpression = (s) => (left, right) => {
 
 module.exports = {
   addition: createBinaryExpression(Symbol.addition),
-  subract: createBinaryExpression(Symbol.subract),
+  subtract: createBinaryExpression(Symbol.subtract),
   multiply: createBinaryExpression(Symbol.multiply),
   divide: createBinaryExpression(Symbol.divide),
   mod: createBinaryExpression(Symbol.mod),

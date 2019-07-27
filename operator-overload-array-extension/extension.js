@@ -1,19 +1,19 @@
 require('../operator-overload/lib/operators/binary');
 
-Array.prototype[Symbol.addition] = (left, right) => {
+const binaryOperation = (callback) => (left, right) => {
     if(right === undefined) {
-        throw new Error(`Array can't be added to undefined`);
+        throw new Error(`Can't perform binary operation on Array and undefined`);
     }
     if (typeof right === 'number' || typeof right === 'string') {
         const copy = new Array(left.length);
         for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] + right;
+            copy[i] = callback(left[i], right);
         }
         return copy;
     } else if (typeof left === 'number' || typeof left === 'string') {
         const copy = new Array(right.length);
         for (let i = 0; i < right.length; i++) {
-            copy[i] = left + right[i];
+            copy[i] = callback(left, right[i]);
         }
         return copy;
     } else {
@@ -22,120 +22,14 @@ Array.prototype[Symbol.addition] = (left, right) => {
         }
         const copy = new Array(left.length);
         for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] + right[i];
+            copy[i] = callback(left[i], right[i]);
         }
         return copy;
     }
 }
 
-Array.prototype[Symbol.subract] = (left, right) => {
-    if(right === undefined) {
-        throw new Error(`Array can't be added to undefined`);
-    }
-    if (typeof right === 'number' || typeof right === 'string') {
-        const copy = new Array(left.length);
-        for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] - right;
-        }
-        return copy;
-    } else if (typeof left === 'number' || typeof left === 'string') {
-        const copy = new Array(right.length);
-        for (let i = 0; i < right.length; i++) {
-            copy[i] = left - right[i];
-        }
-        return copy;
-    } else {
-        if (left.length !== right.length) {
-            throw new Error(`Array length should match`);
-        }
-        const copy = new Array(left.length);
-        for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] - right[i];
-        }
-        return copy;
-    }
-}
-
-Array.prototype[Symbol.mod] = (left, right) => {
-    if(right === undefined) {
-        throw new Error(`Array can't be added to undefined`);
-    }
-    if (typeof right === 'number' || typeof right === 'string') {
-        const copy = new Array(left.length);
-        for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] % right;
-        }
-        return copy;
-    } else if (typeof left === 'number' || typeof left === 'string') {
-        const copy = new Array(right.length);
-        for (let i = 0; i < right.length; i++) {
-            copy[i] = left % right[i];
-        }
-        return copy;
-    } else {
-        if (left.length !== right.length) {
-            throw new Error(`Array length should match`);
-        }
-        const copy = new Array(left.length);
-        for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] % right[i];
-        }
-        return copy;
-    }
-}
-
-Array.prototype[Symbol.divide] = (left, right) => {
-    if(right === undefined) {
-        throw new Error(`Array can't be added to undefined`);
-    }
-    if (typeof right === 'number' || typeof right === 'string') {
-        const copy = new Array(left.length);
-        for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] / right;
-        }
-        return copy;
-    } else if (typeof left === 'number' || typeof left === 'string') {
-        const copy = new Array(right.length);
-        for (let i = 0; i < right.length; i++) {
-            copy[i] = left / right[i];
-        }
-        return copy;
-    } else {
-        if (left.length !== right.length) {
-            throw new Error(`Array length should match`);
-        }
-        const copy = new Array(left.length);
-        for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] / right[i];
-        }
-        return copy;
-    }
-}
-
-Array.prototype[Symbol.multiply] = (left, right) => {
-    if(right === undefined) {
-        throw new Error(`Array can't be added to undefined`);
-    }
-    if (typeof right === 'number' || typeof right === 'string') {
-        const copy = new Array(left.length);
-        for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] % right;
-        }
-        return copy;
-    } else if (typeof left === 'number' || typeof left === 'string') {
-        const copy = new Array(right.length);
-        for (let i = 0; i < right.length; i++) {
-            copy[i] = left % right[i];
-        }
-        return copy;
-    } else {
-        if (left.length !== right.length) {
-            throw new Error(`Array length should match`);
-        }
-        const copy = new Array(left.length);
-        for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] % right[i];
-        }
-        return copy;
-    }
-}
+Array.prototype[Symbol.addition] = binaryOperation((a, b) => a + b);
+Array.prototype[Symbol.subtract] = binaryOperation((a, b) => a - b);
+Array.prototype[Symbol.multiply] = binaryOperation((a, b) => a * b);
+Array.prototype[Symbol.divide] = binaryOperation((a, b) => a / b);
+Array.prototype[Symbol.mod] = binaryOperation((a, b) => a % b);
