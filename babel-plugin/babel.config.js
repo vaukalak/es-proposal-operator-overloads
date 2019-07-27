@@ -4,7 +4,6 @@ module.exports = function (api) {
   const presets = [];
   const plugins = [
     './plugin.js',
-    // "@babel/plugin-transform-modules-commonjs",
   ];
 
   return {

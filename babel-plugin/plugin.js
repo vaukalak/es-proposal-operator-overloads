@@ -1,30 +1,40 @@
-const pathNode = '../../operator-overload/lib/operators/addition';
+const binaryOperatorPath = '../../operator-overload/lib/operators/binary';
+
+const operatorMap = {
+  '+': { exportMethod: 'addition' },
+  '-': { exportMethod: 'subract' },
+  '*': { exportMethod: 'multiply' },
+  '/': { exportMethod: 'divide' },
+  '%': { exportMethod: 'mod' },
+};
 
 module.exports = function({ types: t }) {
+    const requireExpression = t.callExpression(t.identifier('require'), [t.stringLiteral(binaryOperatorPath)]);
+    const requireLiteralMap = Object.keys(operatorMap).reduce((prev, key) => {
+      return prev;
+    }, {});
     return {
       visitor: {
         BinaryExpression: function(path) {
-          const additionRequire = t.callExpression(t.identifier('require'), [t.stringLiteral(pathNode)]);
-          const additionMethod = t.memberExpression(additionRequire, t.identifier("addition"));
+          const { node } = path;
+          const additionMethod = t.memberExpression(requireExpression, t.identifier(operatorMap[node.operator].exportMethod));
           path.replaceWith(
             t.callExpression(
               additionMethod,
               [
-                path.node.left,
-                path.node.right,
+                node.left,
+                node.right,
               ],
             )
           );
         },
         TemplateLiteral: function(path) {
           const expressions = path.get("expressions");
-          // console.log('expressions: ', expressions[0].node);
           const [firstQuasis, ...quasis] = path.node.quasis;
           let index = 0;
           let cummulative = t.stringLiteral(firstQuasis.value.cooked);
           for (const elem of quasis) {
-            const additionRequire = t.callExpression(t.identifier('require'), [t.stringLiteral(pathNode)]);
-            const additionMethod = t.memberExpression(additionRequire, t.identifier("addition"));
+            const additionMethod = t.memberExpression(requireExpression, t.identifier(operatorMap['+'].exportMethod));
 
             if (index < expressions.length) {
               cummulative = t.callExpression(
