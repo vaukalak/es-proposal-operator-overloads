@@ -63,13 +63,13 @@ Array.prototype[Symbol.mod] = (left, right) => {
     if (typeof right === 'number' || typeof right === 'string') {
         const copy = new Array(left.length);
         for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] * right;
+            copy[i] = left[i] % right;
         }
         return copy;
     } else if (typeof left === 'number' || typeof left === 'string') {
         const copy = new Array(right.length);
         for (let i = 0; i < right.length; i++) {
-            copy[i] = left * right[i];
+            copy[i] = left % right[i];
         }
         return copy;
     } else {
@@ -78,7 +78,7 @@ Array.prototype[Symbol.mod] = (left, right) => {
         }
         const copy = new Array(left.length);
         for (let i = 0; i < left.length; i++) {
-            copy[i] = left[i] * right[i];
+            copy[i] = left[i] % right[i];
         }
         return copy;
     }
