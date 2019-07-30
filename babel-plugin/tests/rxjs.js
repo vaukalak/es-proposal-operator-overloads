@@ -16,7 +16,11 @@ const logObservable = (o) => {
     o.subscribe((value) => { console.log(value); });
 } 
 
-logObservable('log: ' + observable);
-logObservable(observable + '.');
-logObservable(`multiply by 5: ${observable * 5}`);
-logObservable(`array entry ${observable + [1, 4]}`);
+const overloaded_observableTest = () => {
+    logObservable('log: ' + observable);
+    logObservable(observable + '.');
+    logObservable(`multiply by 5: ${observable * 5}`);
+    logObservable(`array entry ${observable + [1, 4]}`);
+};
+
+overloaded_observableTest();
