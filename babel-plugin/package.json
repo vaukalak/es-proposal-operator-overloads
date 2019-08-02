@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build-tests": "babel tests -d tests-dist",
-    "run-tests": "npm run build-tests && node tests-dist/overloaded-only.js"
+    "run-tests": "npm run build-tests && node tests-dist/rxjs.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",

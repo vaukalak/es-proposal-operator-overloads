@@ -1,4 +1,5 @@
 const binaryOperatorPath = '../../operator-overload/lib/operators/binary';
+const conditionPath = '../../operator-overload/lib/operators/conditions';
 
 const operatorMap = {
   '+': { exportMethod: 'addition' },
@@ -6,26 +7,46 @@ const operatorMap = {
   '*': { exportMethod: 'multiply' },
   '/': { exportMethod: 'divide' },
   '%': { exportMethod: 'mod' },
+  '===': { exportMethod: 'strictEqual' },
+  '!==': { exportMethod: 'strictNotEqual' },
 };
 
 const isInOverloadedFunction = (path) => {
   let nextParent = path.parentPath;
   while(nextParent) {
-    if (nextParent.node.type === 'ArrowFunctionExpression') {
+    if (nextParent.node.type === 'ArrowFunctionExpression' && nextParent.parent && nextParent.parent.id && nextParent.parent.id.name.indexOf('overloaded_') === 0) {
       break;
     }
     nextParent = nextParent.parentPath;
   }
-  return nextParent && nextParent.parent && nextParent.parent.id.name.indexOf('overloaded_') === 0;
+  return nextParent;
 }
 
-module.exports = function({ types: t }) {
+const pluginVisitor = function(babel) {
+    const { types: t } = babel;
     const requireExpression = t.callExpression(t.identifier('require'), [t.stringLiteral(binaryOperatorPath)]);
+    const requireConditionExpression = t.callExpression(t.identifier('require'), [t.stringLiteral(conditionPath)]);
     return {
       visitor: {
-        // ArrowFunctionExpression: (path) => {
-        //   console.log(1);
-        // },
+        ConditionalExpression: (path) => {
+          const { node } = path;
+          if (isInOverloadedFunction(path)) {
+            const ternaryMethod = t.memberExpression(
+              requireConditionExpression,
+              t.identifier('ternary'),
+            );
+            path.replaceWith(
+              t.callExpression(
+                ternaryMethod,
+                [
+                  node.test,
+                  node.consequent,
+                  node.alternate,
+                ],
+              )
+            );
+          }
+        },
         BinaryExpression: function(path) {
           const { node } = path;
           if (isInOverloadedFunction(path)) {
@@ -77,3 +98,5 @@ module.exports = function({ types: t }) {
       }
     };
   };
+
+  module.exports = pluginVisitor;

@@ -3,6 +3,8 @@ Symbol.subtract = Symbol('subtract');
 Symbol.mod = Symbol('mod');
 Symbol.divide = Symbol('divide');
 Symbol.multiply = Symbol('multiply');
+Symbol.strictEqual = Symbol('strictEqual');
+Symbol.strictNotEqual = Symbol('strictNotEqual');
 
 const primitives = new Set([
   'string',
@@ -35,4 +37,6 @@ module.exports = {
   multiply: createBinaryExpression(Symbol.multiply, (a, b) => a * b),
   divide: createBinaryExpression(Symbol.divide, (a, b) => a / b),
   mod: createBinaryExpression(Symbol.mod, (a, b) => a % b),
+  strictEqual: createBinaryExpression(Symbol.strictEqual, (a, b) => a === b),
+  strictNotEqual: createBinaryExpression(Symbol.strictNotEqual, (a, b) => a !== b),
 };
