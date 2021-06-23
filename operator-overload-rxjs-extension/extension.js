@@ -1,6 +1,6 @@
 const { curry } = require('lodash');
-const { merge, combineLatest,concat, iif } = require('rxjs');
-const { map, filter, skipUntil, mergeMap, withLatestFrom, takeLast, last } = require('rxjs/operators');
+const { merge, BehaviorSubject, of } = require("rxjs");
+const { withLatestFrom, map, flatMap, filter, skipUntil, mergeMap, takeLatest, takeLast, last } = require('rxjs/operators');
 const {
  addition,
  subtract,
@@ -22,12 +22,30 @@ const binaryOperation = (callback) => (left, right) => {
     return Symbol.unhandledOperator;
 }
 
+const flatMapObservable = (o) => {
+    return o.pipe(
+        flatMap(i => i)
+    )
+    // if (o.subscribe) {
+    //     return o.pipe(
+    //         flatMap(i => i)
+    //     )
+    // }
+    // return o;
+}
+
 const conditionOperation = (condition, consequent, alternate) => {
+    const consequentObservable = consequent.subscribe
+        ? consequent
+        : of(consequent);
+    const alternateObservable = alternate.subscribe
+        ? alternate
+        : of(alternate);
     const trueCondition = filter(v => !!v)(condition);
     const falseCondition = filter(v => !v)(condition);
     return merge(
-        withLatestFrom(consequent, (a, b) => b)(trueCondition),
-        withLatestFrom(alternate, (a, b) => b)(falseCondition),
+        withLatestFrom(consequentObservable, (a, b) => b)(trueCondition),
+        withLatestFrom(alternateObservable, (a, b) => b)(falseCondition),
     );
 }
 

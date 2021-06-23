@@ -1,1 +1,1 @@
-Symbol.unhandledOperator = Symbol('addition');
+Symbol.unhandledOperator = Symbol('unhandledOperator');

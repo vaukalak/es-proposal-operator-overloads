@@ -9,17 +9,25 @@ const operatorMap = {
   '%': { exportMethod: 'mod' },
   '===': { exportMethod: 'strictEqual' },
   '!==': { exportMethod: 'strictNotEqual' },
+  '==': { exportMethod: 'nonStrictEqual' },
+  '!=': { exportMethod: 'nonStrictNotEqual' },
 };
 
 const isInOverloadedFunction = (path) => {
   let nextParent = path.parentPath;
   while(nextParent) {
-    if (nextParent.node.type === 'ArrowFunctionExpression' && nextParent.parent && nextParent.parent.id && nextParent.parent.id.name.indexOf('overloaded_') === 0) {
-      break;
+    const { parent } = nextParent;
+    const useOverload = parent.directives && parent.directives.some(
+      ({ value }) => {
+        return value.value === "use overload";
+      }
+    );
+    if (useOverload) {
+      return true;
     }
     nextParent = nextParent.parentPath;
   }
-  return nextParent;
+  return false;
 }
 
 const pluginVisitor = function(babel) {

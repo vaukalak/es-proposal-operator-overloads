@@ -1,3 +1,4 @@
+"use overload";
 require('../../operator-overload-array-extension/extension');
 
 const overloaded_arrayTest = () => {
