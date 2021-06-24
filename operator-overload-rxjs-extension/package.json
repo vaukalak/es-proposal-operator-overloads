@@ -1,7 +1,7 @@
 {
   "name": "operator-overload-rxjs-extension",
   "main": "extension.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "peerDependencies": {
     "operator-overload": "1.0.0"
   },
