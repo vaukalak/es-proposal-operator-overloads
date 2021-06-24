@@ -668,9 +668,9 @@ inherits@2, inherits@^2.0.3, inherits@~2.0.3:
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
 ini@~1.3.0:
-  version "1.3.5"
-  resolved "https://registry.npmjs.org/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
-  integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
+  integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
 is-accessor-descriptor@^0.1.6:
   version "0.1.6"
@@ -1082,22 +1082,6 @@ once@^1.3.0:
   integrity sha1-WDsap3WWHUsROsF9nFC6753Xa9E=
   dependencies:
     wrappy "1"
-
-operator-overload-rxjs-extension@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/operator-overload-rxjs-extension/-/operator-overload-rxjs-extension-1.0.3.tgz#9e89cc8c1726a4bf00fe24a7c7bc068c4fb865c5"
-  integrity sha512-WHKkc9nuWtjObrYAqy6BEm1uB5aFZdy4s7kuIN6ncmEIFGIXhYKZewi3mFrhsqQqiwffhgG8WMJsmC/lQbu7uQ==
-  dependencies:
-    lodash "^4.17.15"
-    rxjs "^6.5.2"
-
-operator-overload@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/operator-overload/-/operator-overload-1.0.0.tgz#b5b80005256602aa3c908c4bb2318a7daed595f4"
-  integrity sha512-GQqR96rktz7kYo9cHcsaO/0C66lFpJuZTwoZ5MH1AagGqW4zftABbJ8cAZDZHXKdtfcwDU3L1/aZqa+HyK0nNg==
-  dependencies:
-    lodash "^4.17.15"
-    rxjs "^6.5.2"
 
 os-homedir@^1.0.0:
   version "1.0.2"
