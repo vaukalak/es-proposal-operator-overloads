@@ -1,6 +1,6 @@
 const { curry } = require('lodash');
-const { merge, BehaviorSubject, of } = require("rxjs");
-const { withLatestFrom, map, flatMap, filter, skipUntil, mergeMap, takeLatest, takeLast, last } = require('rxjs/operators');
+const { merge, of, combineLatest } = require("rxjs");
+const { withLatestFrom, map, filter } = require('rxjs/operators');
 const {
  addition,
  subtract,
@@ -9,9 +9,16 @@ const {
  mod,
  strictEqual,
  strictNotEqual,
-} = require('../operator-overload/lib/operators/binary');
+} = require('operator-overload/lib/operators/binary');
 
 const binaryOperation = (callback) => (left, right) => {
+    if (left.subscribe && right.subscribe) {
+        return patch(combineLatest(
+            left,
+            right,
+            callback,
+        ));
+    }
     if (left.subscribe) {
         const curried = (l) => callback(l, right);
         return patch(map(curried)(left));
@@ -20,18 +27,6 @@ const binaryOperation = (callback) => (left, right) => {
         return patch(map(curry(callback)(left))(right));
     }
     return Symbol.unhandledOperator;
-}
-
-const flatMapObservable = (o) => {
-    return o.pipe(
-        flatMap(i => i)
-    )
-    // if (o.subscribe) {
-    //     return o.pipe(
-    //         flatMap(i => i)
-    //     )
-    // }
-    // return o;
 }
 
 const conditionOperation = (condition, consequent, alternate) => {
@@ -43,10 +38,10 @@ const conditionOperation = (condition, consequent, alternate) => {
         : of(alternate);
     const trueCondition = filter(v => !!v)(condition);
     const falseCondition = filter(v => !v)(condition);
-    return merge(
+    return patch(merge(
         withLatestFrom(consequentObservable, (a, b) => b)(trueCondition),
         withLatestFrom(alternateObservable, (a, b) => b)(falseCondition),
-    );
+    ));
 }
 
 const patch = (v) => {

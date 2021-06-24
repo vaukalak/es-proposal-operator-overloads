@@ -1,4 +1,4 @@
-require('../operator-overload/lib/operators/binary');
+require('operator-overload/lib/operators/binary');
 
 const binaryOperation = (callback) => (left, right) => {
     if(right === undefined) {

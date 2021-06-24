@@ -1,5 +1,4 @@
-const binaryOperatorPath = '../../operator-overload/lib/operators/binary';
-const conditionPath = '../../operator-overload/lib/operators/conditions';
+const path = 'operator-overload';
 
 const operatorMap = {
   '+': { exportMethod: 'addition' },
@@ -32,15 +31,21 @@ const isInOverloadedFunction = (path) => {
 
 const pluginVisitor = function(babel) {
     const { types: t } = babel;
-    const requireExpression = t.callExpression(t.identifier('require'), [t.stringLiteral(binaryOperatorPath)]);
-    const requireConditionExpression = t.callExpression(t.identifier('require'), [t.stringLiteral(conditionPath)]);
+    const binaryExpression = t.memberExpression(
+      t.callExpression(t.identifier('require'), [t.stringLiteral(path)]),
+      t.identifier("binary")
+    );
+    const conditionExpression = t.memberExpression(
+      t.callExpression(t.identifier('require'), [t.stringLiteral(path)]),
+      t.identifier("conditions")
+    );
     return {
       visitor: {
         ConditionalExpression: (path) => {
           const { node } = path;
           if (isInOverloadedFunction(path)) {
             const ternaryMethod = t.memberExpression(
-              requireConditionExpression,
+              conditionExpression,
               t.identifier('ternary'),
             );
             path.replaceWith(
@@ -59,7 +64,7 @@ const pluginVisitor = function(babel) {
           const { node } = path;
           if (isInOverloadedFunction(path)) {
             const additionMethod = t.memberExpression(
-              requireExpression,
+              binaryExpression,
               t.identifier(operatorMap[node.operator].exportMethod),
             );
             path.replaceWith(
@@ -80,7 +85,7 @@ const pluginVisitor = function(babel) {
             let index = 0;
             let cummulative = t.stringLiteral(firstQuasis.value.cooked);
             for (const elem of quasis) {
-              const additionMethod = t.memberExpression(requireExpression, t.identifier(operatorMap['+'].exportMethod));
+              const additionMethod = t.memberExpression(binaryExpression, t.identifier(operatorMap['+'].exportMethod));
   
               if (index < expressions.length) {
                 cummulative = t.callExpression(
