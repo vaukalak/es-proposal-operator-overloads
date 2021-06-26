@@ -1,4 +1,5 @@
-Symbol.ternary = Symbol('ternary');
+require("../symbols");
+
 
 const createConditionExpression = (s, defaultHandler) => (condition, left, right) => {
   if (condition[s]) {

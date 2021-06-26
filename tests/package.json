@@ -6,14 +6,15 @@
     "run-tests": "npm run build-tests && node tests-dist/rxjs.js"
   },
   "devDependencies": {
-    "operator-overload-babel-plugin": "1.0.1",
     "@babel/cli": "^7.5.0",
     "@babel/core": "^7.5.0",
     "@babel/helper-module-imports": "^7.0.0",
     "lodash": "^4.17.15",
+    "operator-overload-babel-plugin": "1.0.1",
     "rxjs": "^6.5.2"
   },
   "dependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.14.5",
     "operator-overload": "1.0.0",
     "operator-overload-rxjs-extension": "1.0.6"
   },

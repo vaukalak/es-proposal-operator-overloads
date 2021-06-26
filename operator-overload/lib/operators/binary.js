@@ -1,10 +1,4 @@
-Symbol.addition = Symbol('addition');
-Symbol.subtract = Symbol('subtract');
-Symbol.mod = Symbol('mod');
-Symbol.divide = Symbol('divide');
-Symbol.multiply = Symbol('multiply');
-Symbol.strictEqual = Symbol('strictEqual');
-Symbol.strictNotEqual = Symbol('strictNotEqual');
+require("../symbols");
 
 const primitives = new Set([
   'string',
@@ -13,6 +7,8 @@ const primitives = new Set([
 ]);
 
 const createBinaryExpression = (s, defaultHandler) => (left, right) => {
+  // console.log(">>> left:", left);
+  // console.log(">>> s:", s);
   if (left && left[s]) {
       const result = left[s](left, right);
       if (result !== Symbol.unhandledOperator) {
