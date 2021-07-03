@@ -32,9 +32,8 @@ const createBinaryExpression = (s, defaultHandler) => {
 module.exports = {
   primitives,
   createBinaryExpression,
-  and: createBinaryExpression(Symbol.and, (a, b) => {
-    return a && b;
-  }),
+  or: createBinaryExpression(Symbol.or, (a, b) => a || b),
+  and: createBinaryExpression(Symbol.and, (a, b) => a && b),
   greaterThan: createBinaryExpression(Symbol.greaterThan, (a, b) => a > b),
   greaterThanOrEqual: createBinaryExpression(Symbol.greaterThanOrEqual, (a, b) => a >= b),
   lessThan: createBinaryExpression(Symbol.lessThan, (a, b) => a < b),

@@ -3,6 +3,7 @@ const path = 'operator-overload';
 const operatorMap = {
   '!': { exportMethod: 'negate' },
   '&&': { exportMethod: 'and' },
+  '||': { exportMethod: 'or' },
   '>': { exportMethod: 'greaterThan' },
   '>=': { exportMethod: 'greaterThanOrEqual' },
   '<': { exportMethod: 'lessThan' },

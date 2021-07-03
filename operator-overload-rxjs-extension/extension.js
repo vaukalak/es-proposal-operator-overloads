@@ -3,6 +3,7 @@ const { merge, of, combineLatest } = require("rxjs");
 const { withLatestFrom, map, filter } = require('rxjs/operators');
 const {
  and,
+ or,
  greaterThan,    
  greaterThanOrEqual, 
  lessThan,   
@@ -21,7 +22,7 @@ const {
 
 const unaryOperation = (callback) => (argument) => {
     if (argument.subscribe) {
-        return patch(argument.pipe(callback));
+        return patch(argument.pipe(map(callback)));
     }
     return Symbol.unhandledOperator;
 };
@@ -68,6 +69,7 @@ const conditionOperation = (condition, consequent, alternate) => {
 const patch = (v) => {
     v[Symbol.negate] = unaryOperation(negate);
     v[Symbol.and] = binaryOperation(and);
+    v[Symbol.or] = binaryOperation(or);
     v[Symbol.greaterThan] = binaryOperation(greaterThan);
     v[Symbol.greaterThanOrEqual] = binaryOperation(greaterThanOrEqual);
     v[Symbol.lessThan] = binaryOperation(lessThan);

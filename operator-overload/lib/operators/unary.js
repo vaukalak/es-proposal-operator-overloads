@@ -1,7 +1,6 @@
 require("../symbols");
 const binary = require("./binary");
 
-// console.log(">>> binary:", binary);
 const { primitives } = binary;
 
 const createUnaryExpression = (s, defaultHandler) => {
@@ -12,10 +11,6 @@ const createUnaryExpression = (s, defaultHandler) => {
               return result;
           }
       }
-      console.log(">>> s:", s);
-      console.log(">>> primitives:", primitives);
-      console.log(">>> value:", value);
-      console.log(">>> value[s]:", value[s]);
       if (primitives.has(typeof value)) {
         return defaultHandler(value)
       }

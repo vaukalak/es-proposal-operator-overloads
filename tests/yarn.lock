@@ -1042,23 +1042,22 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-operator-overload-babel-plugin@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/operator-overload-babel-plugin/-/operator-overload-babel-plugin-1.0.1.tgz#f298c05b156bda12fe60cdc56276e523917b4812"
-  integrity sha512-gjeXTvMALwXVx64FjifwhyAizOxxx/GCb088VywRspSExCIXfC0H5tkNKaMuvEJc70+Ur5/eYYLAcdW8X9aV3g==
+operator-overload-babel-plugin@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/operator-overload-babel-plugin/-/operator-overload-babel-plugin-1.0.3.tgz#756875bd3439a6ca760453fa51851ca5d3d5644c"
+  integrity sha512-68IFcXNbi6+cxlIor9aRdeShJh1ZtEvm1F0lH4Usmh+aoGZWi7tXewSYanzjo34oCsopPqfe5S+dsgCZEHCFBw==
 
-operator-overload-rxjs-extension@1.0.6:
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/operator-overload-rxjs-extension/-/operator-overload-rxjs-extension-1.0.6.tgz#6ab55b055f66b3b62855697659c78707b65e81c9"
-  integrity sha512-faAFCVzs/SmODVcc4i2WPNx1/PF8Fb2i3Aq4d+jHmRWxMO0rXZRnJzVm3A8/V4aMhn89XW81QIvpp/xvr0L4qA==
+operator-overload-rxjs-extension@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.npmjs.org/operator-overload-rxjs-extension/-/operator-overload-rxjs-extension-1.0.9.tgz#6197c717fbf9687556bae3c46284a08ad2734893"
+  integrity sha512-cJI+xNZnOBFkZi6ojLdvzfu9BbfEaluljNfbqle/d/piHaItCgfGzdP2awopVf5jhkQYqgVos4HGYzJzaprhCg==
   dependencies:
     lodash "^4.17.15"
-    rxjs "^6.5.2"
 
-operator-overload@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/operator-overload/-/operator-overload-1.0.0.tgz#b5b80005256602aa3c908c4bb2318a7daed595f4"
-  integrity sha512-GQqR96rktz7kYo9cHcsaO/0C66lFpJuZTwoZ5MH1AagGqW4zftABbJ8cAZDZHXKdtfcwDU3L1/aZqa+HyK0nNg==
+operator-overload@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.npmjs.org/operator-overload/-/operator-overload-1.0.6.tgz#06b1b26e8eac62236cdb229e2bc3feea89dab7c0"
+  integrity sha512-t+n1rGl4SVpDZaPwsE/FQOLetVpSMCdNTa7UOFib++r6xqkYEh99KAVGsa/HxBasLycmAn4DYz9afGOSqZjzyQ==
   dependencies:
     lodash "^4.17.15"
     rxjs "^6.5.2"

@@ -1,7 +1,7 @@
 const { interval } = require('rxjs');
 const { tap, map } = require('rxjs/operators');
 // require('../../operator-overload-array-extension/extension');
-const { patch } = require('../../operator-overload-rxjs-extension/extension');
+const { patch } = require('operator-overload-rxjs-extension/extension');
 
 const observable = patch(interval(1000));
 // const observable = `${}`;
@@ -15,7 +15,8 @@ const overloaded_observableTest = () => {
     // console.log(">>> a:", require("operator-overload"));
     // log(observable !== 1 && observable !== 3);
     // log("abc" + (observable !== 1));
-    // log(!(observable !== 1) + "dfc");
+    log((observable !== 1) + "abc");
+    log(!(observable !== 1) + "dfc");
     // log(!observable);
     // log((observable !== 1) + "dfc");
     // log(observable === 0 ? "START:" : "******");

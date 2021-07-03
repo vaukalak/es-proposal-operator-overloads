@@ -1,5 +1,6 @@
 Symbol.negate = Symbol('negate');
 Symbol.and = Symbol('and');
+Symbol.or = Symbol('or');
 Symbol.greaterThan = Symbol('greaterThan');
 Symbol.greaterThanOrEqual = Symbol('greaterThanOrEqual');
 Symbol.lessThan = Symbol('lessThan');
@@ -17,6 +18,7 @@ module.exports = {
     symbols: [
         Symbol.negate,
         Symbol.and,
+        Symbol.or,
         Symbol.greaterThan,
         Symbol.greaterThanOrEqual,
         Symbol.lessThan,
