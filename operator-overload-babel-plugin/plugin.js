@@ -1,6 +1,13 @@
 const path = 'operator-overload';
 
 const operatorMap = {
+  '!': { exportMethod: 'negate' },
+  '&&': { exportMethod: 'and' },
+  '>': { exportMethod: 'greaterThan' },
+  '>=': { exportMethod: 'greaterThanOrEqual' },
+  '<': { exportMethod: 'lessThan' },
+  '<=': { exportMethod: 'lessThanOrEqual' },
+  '&&': { exportMethod: 'and' },
   '+': { exportMethod: 'addition' },
   '-': { exportMethod: 'subtract' },
   '*': { exportMethod: 'multiply' },
@@ -35,6 +42,10 @@ const pluginVisitor = function(babel) {
       t.callExpression(t.identifier('require'), [t.stringLiteral(path)]),
       t.identifier("binary")
     );
+    const unaryExpression = t.memberExpression(
+      t.callExpression(t.identifier('require'), [t.stringLiteral(path)]),
+      t.identifier("unary")
+    );
     const conditionExpression = t.memberExpression(
       t.callExpression(t.identifier('require'), [t.stringLiteral(path)]),
       t.identifier("conditions")
@@ -60,16 +71,33 @@ const pluginVisitor = function(babel) {
             );
           }
         },
-        BinaryExpression: function(path) {
+        UnaryExpression(path) {
           const { node } = path;
           if (isInOverloadedFunction(path)) {
-            const additionMethod = t.memberExpression(
+            const unaryMethod = t.memberExpression(
+              unaryExpression,
+              t.identifier(operatorMap[node.operator].exportMethod),
+            );
+            path.replaceWith(
+              t.callExpression(
+                unaryMethod,
+                [
+                  node.argument,
+                ],
+              )
+            );
+          }
+        },
+        Binary: function(path) {
+          const { node } = path;
+          if (isInOverloadedFunction(path)) {
+            const unaryMethod = t.memberExpression(
               binaryExpression,
               t.identifier(operatorMap[node.operator].exportMethod),
             );
             path.replaceWith(
               t.callExpression(
-                additionMethod,
+                unaryMethod,
                 [
                   node.left,
                   node.right,

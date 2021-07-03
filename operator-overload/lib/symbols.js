@@ -1,3 +1,9 @@
+Symbol.negate = Symbol('negate');
+Symbol.and = Symbol('and');
+Symbol.greaterThan = Symbol('greaterThan');
+Symbol.greaterThanOrEqual = Symbol('greaterThanOrEqual');
+Symbol.lessThan = Symbol('lessThan');
+Symbol.lessThanOrEqual = Symbol('lessThanOrEqual');
 Symbol.addition = Symbol('addition');
 Symbol.subtract = Symbol('subtract');
 Symbol.mod = Symbol('mod');
@@ -7,13 +13,21 @@ Symbol.strictEqual = Symbol('strictEqual');
 Symbol.strictNotEqual = Symbol('strictNotEqual');
 Symbol.ternary = Symbol('ternary');
 
-export const symbols = [
-    Symbol.addition,
-    Symbol.subtract,
-    Symbol.mod,
-    Symbol.divide,
-    Symbol.multiply,
-    Symbol.strictEqual,
-    Symbol.strictNotEqual,
-    Symbol.ternary,
-]
+module.exports = {
+    symbols: [
+        Symbol.negate,
+        Symbol.and,
+        Symbol.greaterThan,
+        Symbol.greaterThanOrEqual,
+        Symbol.lessThan,
+        Symbol.lessThanOrEqual,
+        Symbol.addition,
+        Symbol.subtract,
+        Symbol.mod,
+        Symbol.divide,
+        Symbol.multiply,
+        Symbol.strictEqual,
+        Symbol.strictNotEqual,
+        Symbol.ternary,
+    ]
+}

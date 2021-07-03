@@ -2,6 +2,11 @@ const { curry } = require('lodash');
 const { merge, of, combineLatest } = require("rxjs");
 const { withLatestFrom, map, filter } = require('rxjs/operators');
 const {
+ and,
+ greaterThan,    
+ greaterThanOrEqual, 
+ lessThan,   
+ lessThanOrEqual,    
  addition,
  subtract,
  multiply,
@@ -10,6 +15,16 @@ const {
  strictEqual,
  strictNotEqual,
 } = require('operator-overload/lib/operators/binary');
+const {
+    negate,
+} = require('operator-overload/lib/operators/unary');
+
+const unaryOperation = (callback) => (argument) => {
+    if (argument.subscribe) {
+        return patch(argument.pipe(callback));
+    }
+    return Symbol.unhandledOperator;
+};
 
 const binaryOperation = (callback) => (left, right) => {
     if (left.subscribe && right.subscribe) {
@@ -20,12 +35,18 @@ const binaryOperation = (callback) => (left, right) => {
         ));
     }
     if (left.subscribe) {
-        const curried = (l) => callback(l, right);
-        return patch(map(curried)(left));
+        const rightCurried = (l) => {
+            return callback(l, right);
+        };
+        return patch(map(rightCurried)(left));
     }
     if (right.subscribe) {
-        return patch(map(curry(callback)(left))(right));
+        const leftCurried = (r) => {
+            return callback(left, r);
+        };
+        return patch(map(leftCurried)(right));
     }
+    // console.log("Unhandled");
     return Symbol.unhandledOperator;
 }
 
@@ -45,6 +66,12 @@ const conditionOperation = (condition, consequent, alternate) => {
 }
 
 const patch = (v) => {
+    v[Symbol.negate] = unaryOperation(negate);
+    v[Symbol.and] = binaryOperation(and);
+    v[Symbol.greaterThan] = binaryOperation(greaterThan);
+    v[Symbol.greaterThanOrEqual] = binaryOperation(greaterThanOrEqual);
+    v[Symbol.lessThan] = binaryOperation(lessThan);
+    v[Symbol.lessThanOrEqual] = binaryOperation(lessThanOrEqual);
     v[Symbol.addition] = binaryOperation(addition);
     v[Symbol.subtract] = binaryOperation(subtract);
     v[Symbol.multiply] = binaryOperation(multiply);

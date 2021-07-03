@@ -6,28 +6,39 @@ const primitives = new Set([
   'boolean',
 ]);
 
-const createBinaryExpression = (s, defaultHandler) => (left, right) => {
-  // console.log(">>> left:", left);
-  // console.log(">>> s:", s);
-  if (left && left[s]) {
-      const result = left[s](left, right);
-      if (result !== Symbol.unhandledOperator) {
-          return result;
-      }
-  }
-  if (right && right[s]) {
-      const result = right[s](left, right);
-      if (result !== Symbol.unhandledOperator) {
-          return result;
-      }
-  }
-  if (primitives.has(typeof left) && primitives.has(typeof right)) {
-    return defaultHandler(left, right)
-  }
-  throw new Error(`${typeof left} ${left} doesn't support ${s.toString()} with ${typeof right} ${right}`);
+const createBinaryExpression = (s, defaultHandler) => {
+  const expression = (left, right) => {
+    if (left && left[s]) {
+        const result = left[s](left, right);
+        if (result !== Symbol.unhandledOperator) {
+            return result;
+        }
+    }
+    if (right && right[s]) {
+        const result = right[s](left, right);
+        if (result !== Symbol.unhandledOperator) {
+            return result;
+        }
+    }
+    if (primitives.has(typeof left) && primitives.has(typeof right)) {
+      return defaultHandler(left, right)
+    }
+    throw new Error(`${typeof left} ${left} doesn't support ${s.toString()} with ${typeof right} ${right}`);
+  };
+  expression.defaultHandler = defaultHandler;
+  return expression;
 };
 
 module.exports = {
+  primitives,
+  createBinaryExpression,
+  and: createBinaryExpression(Symbol.and, (a, b) => {
+    return a && b;
+  }),
+  greaterThan: createBinaryExpression(Symbol.greaterThan, (a, b) => a > b),
+  greaterThanOrEqual: createBinaryExpression(Symbol.greaterThanOrEqual, (a, b) => a >= b),
+  lessThan: createBinaryExpression(Symbol.lessThan, (a, b) => a < b),
+  lessThanOrEqual: createBinaryExpression(Symbol.lessThanOrEqual, (a, b) => a <= b),
   addition: createBinaryExpression(Symbol.addition, (a, b) => a + b),
   subtract: createBinaryExpression(Symbol.subtract, (a, b) => a - b),
   multiply: createBinaryExpression(Symbol.multiply, (a, b) => a * b),

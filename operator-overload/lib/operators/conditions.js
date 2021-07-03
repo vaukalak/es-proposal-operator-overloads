@@ -9,6 +9,7 @@ const createConditionExpression = (s, defaultHandler) => (condition, left, right
 };
 
 module.exports = {
+  createConditionExpression,
   ternary: createConditionExpression(Symbol.ternary, (condition, a, b) => {
       if(condition) {
           a();
