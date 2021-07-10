@@ -16,8 +16,8 @@ const operatorMap = {
   '%': { exportMethod: 'mod' },
   '===': { exportMethod: 'strictEqual' },
   '!==': { exportMethod: 'strictNotEqual' },
-  '==': { exportMethod: 'nonStrictEqual' },
-  '!=': { exportMethod: 'nonStrictNotEqual' },
+  '==': { exportMethod: 'equal' },
+  '!=': { exportMethod: 'notEqual' },
 };
 
 const isInOverloadedFunction = (path) => {

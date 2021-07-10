@@ -10,6 +10,15 @@ const log = (o) => {
     o.subscribe((value) => { console.log(value); });
 } 
 
+const overloaded_equal = () => {
+    "use overload";
+    const value = { foo: true };
+    const subj = patch(new BehaviorSubject(value));
+    console.log(">>> subj:", subj);
+    console.log(">>> value:", value);
+    console.log(">>> eq:", subj == value);
+}
+
 const overloaded_observableTest = () => {
     "use overload";
     // console.log(">>> a:", require("operator-overload"));

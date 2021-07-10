@@ -8,7 +8,6 @@ import { createElement, $ } from "./utils";
 const FormElement = ({ field }) => {
   const error = patch(
     field.value
-      // .pipe(tap((v) => console.log(">>> v:", v)))
       .pipe(map((v) => v.length === 0))
   );
   const styles = {
