@@ -10,6 +10,8 @@ Symbol.subtract = Symbol('subtract');
 Symbol.mod = Symbol('mod');
 Symbol.divide = Symbol('divide');
 Symbol.multiply = Symbol('multiply');
+Symbol.equal = Symbol('equal');
+Symbol.notEqual = Symbol('notEqual');
 Symbol.strictEqual = Symbol('strictEqual');
 Symbol.strictNotEqual = Symbol('strictNotEqual');
 Symbol.ternary = Symbol('ternary');
@@ -28,6 +30,8 @@ module.exports = {
         Symbol.mod,
         Symbol.divide,
         Symbol.multiply,
+        Symbol.equal,
+        Symbol.notEqual,
         Symbol.strictEqual,
         Symbol.strictNotEqual,
         Symbol.ternary,

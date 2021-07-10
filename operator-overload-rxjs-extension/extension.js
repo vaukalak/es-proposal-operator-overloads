@@ -13,12 +13,34 @@ const {
  multiply,
  divide,
  mod,
- strictEqual,
- strictNotEqual,
+ equal,
+ notEqual,
 } = require('operator-overload/lib/operators/binary');
 const {
     negate,
 } = require('operator-overload/lib/operators/unary');
+
+const patch = (v) => {
+    v[Symbol.negate] = unaryOperation(negate);
+    v[Symbol.and] = binaryOperation(and);
+    v[Symbol.or] = binaryOperation(or);
+    v[Symbol.greaterThan] = binaryOperation(greaterThan);
+    v[Symbol.greaterThanOrEqual] = binaryOperation(greaterThanOrEqual);
+    v[Symbol.lessThan] = binaryOperation(lessThan);
+    v[Symbol.lessThanOrEqual] = binaryOperation(lessThanOrEqual);
+    v[Symbol.addition] = binaryOperation(addition);
+    v[Symbol.subtract] = binaryOperation(subtract);
+    v[Symbol.multiply] = binaryOperation(multiply);
+    v[Symbol.divide] = binaryOperation(divide);
+    v[Symbol.mod] = binaryOperation(mod);
+    v[Symbol.equal] = binaryOperation(equal);
+    v[Symbol.notEqual] = binaryOperation(notEqual);
+    // v[Symbol.strictEqual] = binaryOperation(strictEqual);
+    // v[Symbol.strictNotEqual] = binaryOperation(strictNotEqual);
+    v[Symbol.ternary] = conditionOperation;
+    v["__isPatchedObservable"] = true;
+    return v;
+};
 
 const unaryOperation = (callback) => (argument) => {
     if (argument.subscribe) {
@@ -65,25 +87,6 @@ const conditionOperation = (condition, consequent, alternate) => {
         withLatestFrom(alternateObservable, (a, b) => b)(falseCondition),
     ));
 }
-
-const patch = (v) => {
-    v[Symbol.negate] = unaryOperation(negate);
-    v[Symbol.and] = binaryOperation(and);
-    v[Symbol.or] = binaryOperation(or);
-    v[Symbol.greaterThan] = binaryOperation(greaterThan);
-    v[Symbol.greaterThanOrEqual] = binaryOperation(greaterThanOrEqual);
-    v[Symbol.lessThan] = binaryOperation(lessThan);
-    v[Symbol.lessThanOrEqual] = binaryOperation(lessThanOrEqual);
-    v[Symbol.addition] = binaryOperation(addition);
-    v[Symbol.subtract] = binaryOperation(subtract);
-    v[Symbol.multiply] = binaryOperation(multiply);
-    v[Symbol.divide] = binaryOperation(divide);
-    v[Symbol.mod] = binaryOperation(mod);
-    v[Symbol.strictEqual] = binaryOperation(strictEqual);
-    v[Symbol.strictNotEqual] = binaryOperation(strictNotEqual);
-    v[Symbol.ternary] = conditionOperation;
-    return v;
-};
 
 module.exports = {
     patch,

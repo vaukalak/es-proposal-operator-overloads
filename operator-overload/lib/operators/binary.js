@@ -6,6 +6,9 @@ const primitives = new Set([
   'boolean',
 ]);
 
+const nativeBinaryExpression = (s, handler) =>
+  handler;
+
 const createBinaryExpression = (s, defaultHandler) => {
   const expression = (left, right) => {
     if (left && left[s]) {
@@ -32,6 +35,7 @@ const createBinaryExpression = (s, defaultHandler) => {
 module.exports = {
   primitives,
   createBinaryExpression,
+  nativeBinaryExpression,
   or: createBinaryExpression(Symbol.or, (a, b) => a || b),
   and: createBinaryExpression(Symbol.and, (a, b) => a && b),
   greaterThan: createBinaryExpression(Symbol.greaterThan, (a, b) => a > b),
@@ -43,6 +47,8 @@ module.exports = {
   multiply: createBinaryExpression(Symbol.multiply, (a, b) => a * b),
   divide: createBinaryExpression(Symbol.divide, (a, b) => a / b),
   mod: createBinaryExpression(Symbol.mod, (a, b) => a % b),
-  strictEqual: createBinaryExpression(Symbol.strictEqual, (a, b) => a === b),
-  strictNotEqual: createBinaryExpression(Symbol.strictNotEqual, (a, b) => a !== b),
+  equal: nativeBinaryExpression(Symbol.equal, (a, b) => a == b),
+  notEqual: nativeBinaryExpression(Symbol.notEqual, (a, b) => a != b),
+  strictEqual: nativeBinaryExpression(Symbol.strictEqual, (a, b) => a === b),
+  strictNotEqual: nativeBinaryExpression(Symbol.strictNotEqual, (a, b) => a !== b),
 };
