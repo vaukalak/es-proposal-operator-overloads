@@ -1,9 +1,9 @@
 {
   "name": "operator-overload-rxjs-extension",
   "main": "extension.js",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "peerDependencies": {
-    "operator-overload": "1.0.0",
+    "operator-overload": "1.0.11",
     "rxjs": "^6.5.2"
   },
   "dependencies": {
@@ -11,6 +11,8 @@
   },
   "devDependencies": {
     "jest": "^27.0.6",
-    "operator-overload-babel-plugin": "^1.0.2"
+    "operator-overload": "1.0.11",
+    "operator-overload-babel-plugin": "^1.0.2",
+    "rxjs": "^6.5.2"
   }
 }

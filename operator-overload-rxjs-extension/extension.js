@@ -69,7 +69,6 @@ const binaryOperation = (callback) => (left, right) => {
         };
         return patch(map(leftCurried)(right));
     }
-    // console.log("Unhandled");
     return Symbol.unhandledOperator;
 }
 

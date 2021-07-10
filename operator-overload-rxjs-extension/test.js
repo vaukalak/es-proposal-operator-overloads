@@ -19,6 +19,31 @@ test('sum observable with observable', () => {
     expect(a).toBe(3);
 });
 
+test('compare observable to object', () => {
+    "use overload"
+    let a;
+    const value = { foo: true };
+    const subj = patch(new BehaviorSubject(value));
+    const compare = value == subj;
+    (compare).subscribe(v => {
+        a = v;
+    });
+    expect(a).toBe(true);
+});
+
+test('strict equal should check instances', () => {
+    "use overload"
+    let a;
+    const value = { foo: true };
+    const subj = patch(new BehaviorSubject(value));
+    const compare = value == subj;
+    (compare).subscribe(v => {
+        a = v;
+    });
+    expect(a).toBe(false);
+});
+
+
 test('sum observable with itself', () => {
     "use overload"
     let a;
