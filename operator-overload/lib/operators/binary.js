@@ -23,10 +23,10 @@ const createBinaryExpression = (s, defaultHandler) => {
             return result;
         }
     }
-    if (primitives.has(typeof left) && primitives.has(typeof right)) {
-      return defaultHandler(left, right)
-    }
-    throw new Error(`${typeof left} ${left} doesn't support ${s.toString()} with ${typeof right} ${right}`);
+    return defaultHandler(left, right);
+    // if (primitives.has(typeof left) && primitives.has(typeof right)) {
+    // }
+    // throw new Error(`${typeof left} ${left} doesn't support ${s.toString()} with ${typeof right} ${right}`);
   };
   expression.defaultHandler = defaultHandler;
   return expression;
@@ -47,8 +47,8 @@ module.exports = {
   multiply: createBinaryExpression(Symbol.multiply, (a, b) => a * b),
   divide: createBinaryExpression(Symbol.divide, (a, b) => a / b),
   mod: createBinaryExpression(Symbol.mod, (a, b) => a % b),
-  equal: nativeBinaryExpression(Symbol.equal, (a, b) => a == b),
-  notEqual: nativeBinaryExpression(Symbol.notEqual, (a, b) => a != b),
+  equal: createBinaryExpression(Symbol.equal, (a, b) => a == b),
+  notEqual: createBinaryExpression(Symbol.notEqual, (a, b) => a != b),
   strictEqual: nativeBinaryExpression(Symbol.strictEqual, (a, b) => a === b),
   strictNotEqual: nativeBinaryExpression(Symbol.strictNotEqual, (a, b) => a !== b),
 };
