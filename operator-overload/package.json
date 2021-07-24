@@ -1,7 +1,7 @@
 {
   "name": "operator-overload",
   "main": "lib/index.js",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "dependencies": {
     "lodash": "^4.17.15",
     "rxjs": "^6.5.2"
