@@ -12,10 +12,10 @@ module.exports = {
   createConditionExpression,
   ternary: createConditionExpression(Symbol.ternary, (condition, a, b) => {
       if(condition) {
-          a();
+          return a;
       } else {
         if (b) {
-          b();
+          return b;
         }
       }
   }),

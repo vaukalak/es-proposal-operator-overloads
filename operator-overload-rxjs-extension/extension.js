@@ -1,9 +1,6 @@
-const { curry } = require('lodash');
 const { merge, of, combineLatest } = require("rxjs");
-const { withLatestFrom, map, filter } = require('rxjs/operators');
+const { withLatestFrom, map, mergeMap, filter } = require('rxjs/operators');
 const {
- and,
- or,
  greaterThan,    
  greaterThanOrEqual, 
  lessThan,   
@@ -22,8 +19,8 @@ const {
 
 const patch = (v) => {
     v[Symbol.negate] = unaryOperation(negate);
-    v[Symbol.and] = binaryOperation(and);
-    v[Symbol.or] = binaryOperation(or);
+    v[Symbol.and] = andOperation();
+    v[Symbol.or] = orOperation();
     v[Symbol.greaterThan] = binaryOperation(greaterThan);
     v[Symbol.greaterThanOrEqual] = binaryOperation(greaterThanOrEqual);
     v[Symbol.lessThan] = binaryOperation(lessThan);
@@ -44,9 +41,71 @@ const patch = (v) => {
 
 const unaryOperation = (callback) => (argument) => {
     if (argument.subscribe) {
-        return patch(argument.pipe(map(callback)));
+        return patch(map(callback)(argument));
     }
     return Symbol.unhandledOperator;
+};
+
+const orOperation = () => (left, right) => {
+    const isLeftObservable = left.subscribe;
+    
+    if (!isLeftObservable) {
+        if (left) {
+            return left;
+        }
+        const rightValue = right(); 
+        if (rightValue.subscribe) {
+            return left || patch(map((r) => left || r)(rightValue));
+        }
+        return Symbol.unhandledOperator;
+    }
+    return patch(left.pipe(
+        mergeMap(
+            (leftValue) => {
+                if (leftValue) {
+                    return of(leftValue);
+                }
+                const rightUnwrapped = right();
+                if (rightUnwrapped.subscribe) {
+                    return map((r) => {
+                        return leftValue || r;
+                    })(rightUnwrapped);
+                }
+                return of(leftValue || rightUnwrapped);
+            }
+        )
+    ));
+};
+
+const andOperation = () => (left, right) => {
+    const isLeftObservable = left.subscribe;
+    
+    if (!isLeftObservable) {
+        if (!left) {
+            return false;
+        }
+        const rightValue = right(); 
+        if (rightValue.subscribe) {
+            return left && patch(map((r) => left && r)(rightValue));
+        }
+        return Symbol.unhandledOperator;
+    }
+    return patch(left.pipe(
+        mergeMap(
+            (leftValue) => {
+                if (!leftValue) {
+                    return of(false);
+                }
+                const rightUnwrapped = right();
+                if (rightUnwrapped.subscribe) {
+                    return map((r) => {
+                        return leftValue && r;
+                    })(rightUnwrapped);
+                }
+                return of(leftValue && rightUnwrapped);
+            }
+        )
+    ));
 };
 
 const binaryOperation = (callback) => (left, right) => {

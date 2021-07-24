@@ -92,16 +92,24 @@ const pluginVisitor = function(babel) {
         Binary: function(path) {
           const { node } = path;
           if (isInOverloadedFunction(path)) {
-            const unaryMethod = t.memberExpression(
+            const binaryMethod = t.memberExpression(
               binaryExpression,
               t.identifier(operatorMap[node.operator].exportMethod),
             );
+            const isBinary = node.operator === "&&" || node.operator === "||";
             path.replaceWith(
               t.callExpression(
-                unaryMethod,
+                binaryMethod,
                 [
                   node.left,
-                  node.right,
+                  isBinary ?
+                    t.arrowFunctionExpression(
+                      [],
+                      t.blockStatement(
+                        [t.returnStatement(node.right)]
+                      )
+                    ) :
+                    node.right,
                 ],
               )
             );

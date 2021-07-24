@@ -17,7 +17,14 @@ const appendRawChild = (element, child) => {
   if (typeof child === "string") {
     validChild = document.createTextNode(child);
   }
-  element.appendChild(validChild);
+  console.log(1);
+  try {
+    element.appendChild(validChild);
+  } catch (err) {
+    console.log("err: ", err);
+    console.log(">>> element:", element);
+    console.log(">>> validChild:", validChild);
+  }
   return validChild;
 };
 

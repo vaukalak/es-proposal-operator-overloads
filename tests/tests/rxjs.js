@@ -26,6 +26,7 @@ const overloaded_observableTest = () => {
     // log("abc" + (observable !== 1));
     log((observable !== 1) + "abc");
     log(!(observable !== 1) + "dfc");
+    observable && 1
     // log(!observable);
     // log((observable !== 1) + "dfc");
     // log(observable === 0 ? "START:" : "******");

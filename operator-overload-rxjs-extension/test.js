@@ -36,20 +36,100 @@ test('strict equal should check instances', () => {
     let a;
     const value = { foo: true };
     const subj = patch(new BehaviorSubject(value));
-    const compare = value == subj;
-    (compare).subscribe(v => {
-        a = v;
-    });
-    expect(a).toBe(false);
+    const compare = value === subj;
+    expect(compare).toBe(false);
 });
 
 
 test('sum observable with itself', () => {
     "use overload"
-    let a;
     const observable = patch(new BehaviorSubject(2));
+    let a;
     (observable + observable).subscribe(v => {
         a = v;
     });
     expect(a).toBe(4);
+});
+
+describe("binary operations", () => {
+    test('not observables', () => {
+        "use overload"
+        expect(false && true).toBe(false);
+        expect(true && false).toBe(false);
+        expect(true && true).toBe(true);
+    });
+
+    test('not observables', () => {
+        "use overload"
+        expect(false && true).toBe(false);
+        expect(true && false).toBe(false);
+        expect(true && true).toBe(true);
+    });
+
+    test('left not observable false', () => {
+        "use overload"
+        expect(false && patch(new BehaviorSubject(2))).toBe(false);
+    });
+
+    test('left not observable true', () => {
+        "use overload"
+        const obs = true && patch(new BehaviorSubject(2));
+        let a;
+        (obs).subscribe(v => {
+            a = v;
+        });
+        expect(a).toBe(2);
+    });
+
+    test('right not observable false', () => {
+        "use overload"
+        const obs = patch(new BehaviorSubject(true)) && false;
+        const a = [];
+        (obs).subscribe(v => {
+            a.push(v);
+        });
+        expect(a).toEqual([false]);
+    });
+
+    test('right not observable true', () => {
+        "use overload"
+        const subject = new BehaviorSubject(true);
+        const obs = patch(subject) && true;
+        const a = [];
+        (obs).subscribe(v => {
+            a.push(v);
+        });
+        subject.next(false);
+        expect(a).toEqual([true, false]);
+    });
+
+    test('both observables', () => {
+        "use overload"
+        const a = patch(new BehaviorSubject(false));
+        const b = patch(new BehaviorSubject(false));
+        const expression = a && b;
+        const results = [];
+        (expression).subscribe(v => {
+            results.push(v);
+        });
+        a.next(true);
+        b.next(true);
+        a.next(false);
+        expect(results).toEqual([false, false, true, false]);
+    });
+
+    test('both observables or operator', () => {
+        "use overload"
+        const a = patch(new BehaviorSubject(false));
+        const b = patch(new BehaviorSubject(false));
+        const expression = a || b;
+        const results = [];
+        (expression).subscribe(v => {
+            results.push(v);
+        });
+        a.next(true);
+        b.next(true);
+        a.next(false);
+        expect(results).toEqual([false, true, true, true]);
+    });
 });
