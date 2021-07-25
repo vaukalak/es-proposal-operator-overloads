@@ -1,4 +1,5 @@
 const { BehaviorSubject } = require("rxjs");
+const { map } = require("rxjs/operators");
 const { patch } = require("./extension");
 
 test('sum observable with number', () => {
@@ -131,5 +132,19 @@ describe("binary operations", () => {
         b.next(true);
         a.next(false);
         expect(results).toEqual([false, true, true, true]);
+    });
+
+    test('should not fail when left pass from true to false', () => {
+        "use overload"
+        const a = patch(new BehaviorSubject({ name: "Mihas" }));
+        const b = patch(a.pipe(map(({ name }) => name)));
+        const expression = a && b;
+        const results = [];
+        (expression).subscribe(v => {
+            results.push(v);
+        });
+        a.next(null);
+        a.next({ name: "Miron" });
+        expect(results).toEqual(["Mihas", null, "Miron"]);
     });
 });

@@ -1,5 +1,5 @@
 const { merge, of, combineLatest } = require("rxjs");
-const { withLatestFrom, map, mergeMap, filter } = require('rxjs/operators');
+const { withLatestFrom, map, switchMap, filter } = require('rxjs/operators');
 const {
  greaterThan,    
  greaterThanOrEqual, 
@@ -60,7 +60,7 @@ const orOperation = () => (left, right) => {
         return Symbol.unhandledOperator;
     }
     return patch(left.pipe(
-        mergeMap(
+        switchMap(
             (leftValue) => {
                 if (leftValue) {
                     return of(leftValue);
@@ -91,17 +91,19 @@ const andOperation = () => (left, right) => {
         return Symbol.unhandledOperator;
     }
     return patch(left.pipe(
-        mergeMap(
+        switchMap(
             (leftValue) => {
                 if (!leftValue) {
-                    return of(false);
+                    return of(leftValue);
                 }
                 const rightUnwrapped = right();
                 if (rightUnwrapped.subscribe) {
-                    return map((r) => {
-                        return leftValue && r;
-                    })(rightUnwrapped);
-                }
+                    return rightUnwrapped.pipe(
+                        map((r) => {
+                            return leftValue && r;
+                        })
+                    );
+                }                
                 return of(leftValue && rightUnwrapped);
             }
         )
