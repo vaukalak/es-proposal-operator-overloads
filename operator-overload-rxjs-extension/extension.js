@@ -90,13 +90,16 @@ const andOperation = () => (left, right) => {
         }
         return Symbol.unhandledOperator;
     }
+    let rightUnwrapped;
     return patch(left.pipe(
         switchMap(
             (leftValue) => {
                 if (!leftValue) {
                     return of(leftValue);
                 }
-                const rightUnwrapped = right();
+                if (!rightUnwrapped) {
+                  rightUnwrapped = right();
+                }
                 if (rightUnwrapped.subscribe) {
                     return rightUnwrapped.pipe(
                         map((r) => {
