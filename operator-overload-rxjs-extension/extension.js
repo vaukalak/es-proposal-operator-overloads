@@ -95,6 +95,7 @@ const andOperation = () => (left, right) => {
         switchMap(
             (leftValue) => {
                 if (!leftValue) {
+                    rightUnwrapped = undefined;
                     return of(leftValue);
                 }
                 if (!rightUnwrapped) {
