@@ -59,13 +59,18 @@ const orOperation = () => (left, right) => {
         }
         return Symbol.unhandledOperator;
     }
+    let rightUnwrapped;
     return patch(left.pipe(
         switchMap(
             (leftValue) => {
                 if (leftValue) {
+                    rightUnwrapped = undefined;
                     return of(leftValue);
                 }
-                const rightUnwrapped = right();
+                if (!rightUnwrapped) {
+                    // console.log("unwrapping right!");
+                    rightUnwrapped = right();
+                }
                 if (rightUnwrapped.subscribe) {
                     return map((r) => {
                         return leftValue || r;

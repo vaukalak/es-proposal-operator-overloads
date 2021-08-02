@@ -128,10 +128,11 @@ describe("binary operations", () => {
         (expression).subscribe(v => {
             results.push(v);
         });
-        a.next(true);
         b.next(true);
+        a.next(true);
+        b.next(false);
         a.next(false);
-        expect(results).toEqual([false, true, true, true]);
+        expect(results).toEqual([false, true, true, false]);
     });
 
     test('should not fail when left pass from true to false', () => {
