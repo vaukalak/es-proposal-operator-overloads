@@ -48,7 +48,7 @@ const unaryOperation = (callback) => (argument) => {
 
 const orOperation = () => (left, right) => {
     const isLeftObservable = left.subscribe;
-    
+    // console.log("orOperation!!!");
     if (!isLeftObservable) {
         if (left) {
             return left;
@@ -63,6 +63,7 @@ const orOperation = () => (left, right) => {
     return patch(left.pipe(
         switchMap(
             (leftValue) => {
+                // console.log(">>> leftValue:", leftValue);
                 if (leftValue) {
                     rightUnwrapped = undefined;
                     return of(leftValue);
@@ -84,7 +85,7 @@ const orOperation = () => (left, right) => {
 
 const andOperation = () => (left, right) => {
     const isLeftObservable = left.subscribe;
-    
+    // console.log("andOperation!!!");
     if (!isLeftObservable) {
         if (!left) {
             return false;
@@ -104,6 +105,7 @@ const andOperation = () => (left, right) => {
                     return of(leftValue);
                 }
                 if (!rightUnwrapped) {
+                //   console.log("unwrapping and right!");
                   rightUnwrapped = right();
                 }
                 if (rightUnwrapped.subscribe) {
