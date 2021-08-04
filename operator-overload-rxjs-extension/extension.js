@@ -1,5 +1,5 @@
-const { merge, of, combineLatest } = require("rxjs");
-const { withLatestFrom, map, switchMap, filter } = require('rxjs/operators');
+const { of } = require("rxjs");
+const { map, switchMap } = require('rxjs/operators');
 const {
  greaterThan,    
  greaterThanOrEqual, 
@@ -32,8 +32,6 @@ const patch = (v) => {
     v[Symbol.mod] = binaryOperation(mod);
     v[Symbol.equal] = binaryOperation(equal);
     v[Symbol.notEqual] = binaryOperation(notEqual);
-    // v[Symbol.strictEqual] = binaryOperation(strictEqual);
-    // v[Symbol.strictNotEqual] = binaryOperation(strictNotEqual);
     v[Symbol.ternary] = conditionOperation;
     v["__isPatchedObservable"] = true;
     return v;
@@ -123,10 +121,14 @@ const andOperation = () => (left, right) => {
 
 const binaryOperation = (callback) => (left, right) => {
     if (left.subscribe && right.subscribe) {
-        return patch(combineLatest(
-            left,
-            right,
-            callback,
+        return patch(left.pipe(
+            switchMap(
+                (leftValue) => {
+                    return right.pipe(
+                        map(rightValue => callback(leftValue, rightValue))
+                    );
+                }
+            )
         ));
     }
     if (left.subscribe) {
@@ -144,18 +146,42 @@ const binaryOperation = (callback) => (left, right) => {
     return Symbol.unhandledOperator;
 }
 
+const ensureObservable = (observable) => {
+    if (observable === undefined || observable === null || !observable.subscribe) {
+        return of(observable);
+    }
+    return observable;
+}
+
 const conditionOperation = (condition, consequent, alternate) => {
-    const consequentObservable = consequent.subscribe
-        ? consequent
-        : of(consequent);
-    const alternateObservable = alternate.subscribe
-        ? alternate
-        : of(alternate);
-    const trueCondition = filter(v => !!v)(condition);
-    const falseCondition = filter(v => !v)(condition);
-    return patch(merge(
-        withLatestFrom(consequentObservable, (a, b) => b)(trueCondition),
-        withLatestFrom(alternateObservable, (a, b) => b)(falseCondition),
+
+    const isConditionObservable = condition !== undefined && condition !== null && condition.subscribe;
+    
+    if (!isConditionObservable) {
+        return condition ?
+            patch(ensureObservable(consequent())) :
+            patch(ensureObservable(alternate()));
+    }
+    let alternateUnwrapped;
+    let consequentUnwrapped;
+    return patch(condition.pipe(
+        switchMap(
+            (conditionValue) => {
+                if (conditionValue) {
+                    alternateUnwrapped = undefined;
+                    if (!consequentUnwrapped) {
+                        consequentUnwrapped = ensureObservable(consequent());
+                    }
+                    return ensureObservable(consequentUnwrapped);
+                }
+
+                consequentUnwrapped = undefined;
+                if (!alternateUnwrapped) {
+                    alternateUnwrapped = ensureObservable(alternate());
+                }
+                return ensureObservable(alternateUnwrapped);
+            }
+        )
     ));
 }
 

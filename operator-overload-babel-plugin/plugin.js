@@ -65,8 +65,18 @@ const pluginVisitor = function(babel) {
                 ternaryMethod,
                 [
                   node.test,
-                  node.consequent,
-                  node.alternate,
+                  t.arrowFunctionExpression(
+                    [],
+                    t.blockStatement(
+                      [t.returnStatement(node.consequent)]
+                    )
+                  ),
+                  t.arrowFunctionExpression(
+                    [],
+                    t.blockStatement(
+                      [t.returnStatement(node.alternate)]
+                    )
+                  ),
                 ],
               )
             );
@@ -96,13 +106,13 @@ const pluginVisitor = function(babel) {
               binaryExpression,
               t.identifier(operatorMap[node.operator].exportMethod),
             );
-            const isBinary = node.operator === "&&" || node.operator === "||";
+            const isLogical = node.operator === "&&" || node.operator === "||";
             path.replaceWith(
               t.callExpression(
                 binaryMethod,
                 [
                   node.left,
-                  isBinary ?
+                  isLogical ?
                     t.arrowFunctionExpression(
                       [],
                       t.blockStatement(

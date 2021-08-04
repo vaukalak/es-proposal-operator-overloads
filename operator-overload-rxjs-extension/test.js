@@ -14,10 +14,16 @@ test('sum observable with number', () => {
 test('sum observable with observable', () => {
     "use overload"
     let a;
-    (patch(new BehaviorSubject(2)) + patch(new BehaviorSubject(1))).subscribe(v => {
+    const left = patch(new BehaviorSubject(2));
+    const right = patch(new BehaviorSubject(1));
+    (left + right).subscribe(v => {
         a = v;
     });
     expect(a).toBe(3);
+    left.next(3);
+    expect(a).toBe(4);
+    right.next(3);
+    expect(a).toBe(6);
 });
 
 test('compare observable to object', () => {
@@ -52,7 +58,73 @@ test('sum observable with itself', () => {
     expect(a).toBe(4);
 });
 
-describe("binary operations", () => {
+describe("ternary operator", () => {
+    test("observable condition", () => {
+        "use overload"
+        const condition = patch(new BehaviorSubject(false));
+        let a;
+        (condition ? 1 : 2).subscribe(v => {
+            a = v;
+        });
+        expect(a).toBe(2);
+        condition.next(true);
+        expect(a).toBe(1);
+        condition.next(false);
+        expect(a).toBe(2);
+    });
+
+    test("observable left", () => {
+        "use overload"
+        const left = patch(new BehaviorSubject(1));
+        let a;
+        (true ? left : 0).subscribe(v => {
+            a = v;
+        });
+        expect(a).toBe(1);
+        left.next(2);
+        expect(a).toBe(2);
+        left.next(3);
+        expect(a).toBe(3);
+    });
+
+    test("observable right", () => {
+        "use overload"
+        const right = patch(new BehaviorSubject(1));
+        let a;
+        (false ? 0 : right).subscribe(v => {
+            a = v;
+        });
+        expect(a).toBe(1);
+        right.next(2);
+        expect(a).toBe(2);
+        right.next(1);
+        expect(a).toBe(1);
+    });
+
+    test("all observables", () => {
+        "use overload"
+        const condition = patch(new BehaviorSubject(false));
+        const consequent = patch(new BehaviorSubject(1));
+        const alternate = patch(new BehaviorSubject(10));
+        let a;
+        (condition ? consequent : alternate).subscribe(v => {
+            a = v;
+        });
+        expect(a).toBe(10);
+        alternate.next(11);
+        expect(a).toBe(11);
+        condition.next(true);
+        expect(a).toBe(1);
+        consequent.next(2);
+        expect(a).toBe(2);
+        alternate.next(12);
+        expect(a).toBe(2);
+        condition.next(false);
+        expect(a).toBe(12);
+    });
+});
+
+describe("logical operations", () => {
     test('not observables', () => {
         "use overload"
         expect(false && true).toBe(false);
